@@ -12,11 +12,13 @@ import android.view.View;
 public class Tela extends View{
 
     Paddle p;
+    Brick b;
 
     public Tela(Context context,int w,int h)
     {
         super(context);
         p = new Paddle(w,h);
+        b = new Brick(w,h);
     }
 
     @Override
@@ -33,7 +35,14 @@ public class Tela extends View{
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        canvas.drawRect(p.pos,new Paint());
+        canvas.drawRect(p.pos, new Paint());
+        for (int i=0; i<= b.pos.length-1;i++)
+        {
+            for (int j = 0; j <= b.pos[i].length - 1; j++)
+            {
+                canvas.drawRect(b.pos[i][j], b.p);
+            }
+        }
         invalidate();
     }
 }
