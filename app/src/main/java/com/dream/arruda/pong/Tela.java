@@ -13,12 +13,14 @@ public class Tela extends View{
 
     Paddle p;
     Brick b;
+    Ball a;
 
     public Tela(Context context,int w,int h)
     {
         super(context);
         p = new Paddle(w,h);
         b = new Brick(w,h);
+        a = new Ball(w,h);
     }
 
     @Override
@@ -35,6 +37,7 @@ public class Tela extends View{
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
+        a.Mover();
         canvas.drawRect(p.pos, new Paint());
         for (int i=0; i<= b.pos.length-1;i++)
         {
@@ -43,6 +46,7 @@ public class Tela extends View{
                 canvas.drawRect(b.pos[i][j], b.p);
             }
         }
+        canvas.drawCircle((int)a.pos.getX(),(int)a.pos.getY(),a.raio,new Paint());
         invalidate();
     }
 }
