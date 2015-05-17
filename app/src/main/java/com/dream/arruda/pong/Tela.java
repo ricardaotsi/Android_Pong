@@ -3,6 +3,7 @@ package com.dream.arruda.pong;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -46,7 +47,7 @@ public class Tela extends View{
                 canvas.drawRect(b.pos[i][j], b.p);
             }
         }
-        canvas.drawCircle((int)a.pos.getX(),(int)a.pos.getY(),a.raio,new Paint());
+        canvas.drawCircle((int)a.pos.getX(),(int)a.pos.getY(),a.raio,a.p);
         invalidate();
     }
 }
