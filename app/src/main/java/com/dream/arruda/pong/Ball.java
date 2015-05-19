@@ -10,7 +10,7 @@ import java.util.Vector;
 public class Ball {
     Vector2D pos;
     Vector2D dir;
-    int vel;
+    double vel;
     int raio;
     int width;
     int height;
@@ -27,12 +27,21 @@ public class Ball {
         p.setARGB(255,255,0,0);
     }
 
-    public void Mover()
+    public void Mover(int y)
     {
-        if(pos.getY()+raio>=height || pos.getY()-raio<=0)
+        if(pos.getY()>=y)
+        {
+            pos.set(width/2,height/2);
+        }
+        else if(pos.getY()-raio<=0 /*|| pos.getY()+raio>=height*/)
             dir.set(dir.getX(), -dir.getY());
         if(pos.getX()+raio>=width || pos.getX()-raio<=0)
             dir.set(-dir.getX(),dir.getY());
         pos.addMe(dir.multiply(vel));
+    }
+
+    public void ChangeDirection()
+    {
+            dir.set(dir.getX(),-dir.getY());
     }
 }

@@ -8,7 +8,7 @@ import android.graphics.Rect;
 public class Paddle {
 
     Rect pos = new Rect();
-    int he;
+    private int he;
 
     public Paddle(int w, int h)
     {

@@ -38,13 +38,24 @@ public class Tela extends View{
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        a.Mover();
+        a.Mover(p.pos.top);
         canvas.drawRect(p.pos, new Paint());
+        if(new Rect((int)a.pos.getX()-a.raio,(int)a.pos.getY()-a.raio,(int)a.pos.getX()+a.raio,(int)a.pos.getY()+a.raio).intersect(p.pos))
+            a.ChangeDirection();
         for (int i=0; i<= b.pos.length-1;i++)
         {
             for (int j = 0; j <= b.pos[i].length - 1; j++)
             {
-                canvas.drawRect(b.pos[i][j], b.p);
+                if(!b.colidiu[i][j])
+                {
+                    canvas.drawRect(b.pos[i][j], b.p);
+                    if(new Rect((int)a.pos.getX()-a.raio,(int)a.pos.getY()-a.raio,(int)a.pos.getX()+a.raio,(int)a.pos.getY()+a.raio).intersect(b.pos[i][j]))
+                    {
+                        b.colidiu[i][j] = true;
+                        a.ChangeDirection();
+                        a.vel+=0.2;
+                    }
+                }
             }
         }
         canvas.drawCircle((int)a.pos.getX(),(int)a.pos.getY(),a.raio,a.p);
