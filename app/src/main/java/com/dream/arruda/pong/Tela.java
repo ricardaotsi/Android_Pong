@@ -43,9 +43,7 @@ public class Tela extends View{
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-
         currentTime = System.currentTimeMillis();
-
         a.Mover(p.pos.top, elapsed);
         canvas.drawRect(p.pos, new Paint());
         if(new Rect((int)a.pos.getX()-a.raio,(int)a.pos.getY()-a.raio,(int)a.pos.getX()+a.raio,(int)a.pos.getY()+a.raio).intersect(p.pos))
@@ -61,17 +59,13 @@ public class Tela extends View{
                     {
                         b.colidiu[i][j] = true;
                         a.ChangeDirection();
-                        a.vel+=16;
                     }
                 }
             }
         }
         canvas.drawCircle((int)a.pos.getX(),(int)a.pos.getY(),a.raio,a.p);
-
-
         elapsed = (System.currentTimeMillis() - lastFrameTime) * .001f;//convert ms to seconds
         lastFrameTime = currentTime;
-
         invalidate();
     }
 }

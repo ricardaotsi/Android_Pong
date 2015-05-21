@@ -23,7 +23,7 @@ public class Ball {
         pos = new Vector2D(w/2,h/2);
         dir = new Vector2D(0.5,1);
         raio = w/35;
-        vel =500;
+        vel = width;
         p.setARGB(255,255,0,0);
     }
 
@@ -37,7 +37,9 @@ public class Ball {
             dir.set(dir.getX(), -dir.getY());
         if(pos.getX()+raio>=width || pos.getX()-raio<=0)
             dir.set(-dir.getX(),dir.getY());
+
         pos.addMe(dir.multiply(vel*fps));
+
     }
 
     public void ChangeDirection()
