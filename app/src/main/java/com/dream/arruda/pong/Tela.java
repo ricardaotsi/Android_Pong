@@ -15,6 +15,8 @@ public class Tela extends View{
     Paddle p;
     Brick b;
     Ball a;
+    long currentTime, lastFrameTime;
+    float elapsed;
 
     public Tela(Context context,int w,int h)
     {
@@ -22,6 +24,9 @@ public class Tela extends View{
         p = new Paddle(w,h);
         b = new Brick(w,h);
         a = new Ball(w,h);
+        currentTime = System.currentTimeMillis();
+        lastFrameTime = System.currentTimeMillis();
+        elapsed=0;
     }
 
     @Override
@@ -38,7 +43,10 @@ public class Tela extends View{
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        a.Mover(p.pos.top);
+
+        currentTime = System.currentTimeMillis();
+
+        a.Mover(p.pos.top, elapsed);
         canvas.drawRect(p.pos, new Paint());
         if(new Rect((int)a.pos.getX()-a.raio,(int)a.pos.getY()-a.raio,(int)a.pos.getX()+a.raio,(int)a.pos.getY()+a.raio).intersect(p.pos))
             a.ChangeDirection();
@@ -53,12 +61,17 @@ public class Tela extends View{
                     {
                         b.colidiu[i][j] = true;
                         a.ChangeDirection();
-                        a.vel+=0.2;
+                        a.vel+=16;
                     }
                 }
             }
         }
         canvas.drawCircle((int)a.pos.getX(),(int)a.pos.getY(),a.raio,a.p);
+
+
+        elapsed = (System.currentTimeMillis() - lastFrameTime) * .001f;//convert ms to seconds
+        lastFrameTime = currentTime;
+
         invalidate();
     }
 }
