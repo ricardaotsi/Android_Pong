@@ -17,8 +17,8 @@ public class Brick {
         for (int i=0; i<= pos.length-1;i++)
         {
             for (int j=0; j<=pos[i].length-1;j++)
-            {   // rect(w/28, h/40, w/28*4, h/40*2) primeira posição
-                pos[i][j] = new Rect((w/28)*(4*j+1),(h/40)*(2*i+1),(w/28*4)*(j+1),(h/40*2)*(i+1));
+            {
+                pos[i][j] = new Rect(w/7*j + w/40, h/30*i + h/70, w/7*(j+1) - w/40, h/30*(i+1));
                 colidiu[i][j] = false;
             }
         }
