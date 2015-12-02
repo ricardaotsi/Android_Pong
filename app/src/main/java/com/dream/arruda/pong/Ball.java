@@ -43,22 +43,25 @@ public class Ball {
         vel = width;
         p.setARGB(255,255,0,0);
     }
-
+    //Move the ball in game loop
     public void Mover(int y, float fps)
     {
+        //if ball position is bellow paddle, reset position to screen center
         if(pos.getY()>=y)
         {
             pos.set(width/2,height/2);
         }
-        else if(pos.getY()-raio<=0 /*|| pos.getY()+raio>=height*/)
+        // if ball hit top wall, change direction
+        else if(pos.getY()-raio<=0)
             dir.set(dir.getX(), -dir.getY());
+        //if ball hit side walls, change direction
         if(pos.getX()+raio>=width || pos.getX()-raio<=0)
             dir.set(-dir.getX(),dir.getY());
-
+        //update position with direction and velocity
         pos.addMe(dir.multiply(vel*fps));
 
     }
-
+    //change ball direction in collision
     public void ChangeDirection()
     {
             dir.set(dir.getX(),-dir.getY());

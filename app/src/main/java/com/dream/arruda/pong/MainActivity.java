@@ -32,11 +32,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Set window properties
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //get screen metrics for dynamic graphics
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        //Create our window class
         t = new Tela(this,metrics.widthPixels,metrics.heightPixels);
         setContentView(t);
     }

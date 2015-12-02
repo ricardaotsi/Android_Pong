@@ -25,18 +25,18 @@ import android.graphics.Rect;
 public class Paddle {
 
     Rect pos = new Rect();
-    private int he;
+    private int wi;
 
     public Paddle(int w, int h)
     {
-        //graphic set by width and height of actual screen for dynamic graphic
-        pos.set(w/2 - (h/10)/2 ,(h/4)*3-(w/20)/2,w/2 + (h/10)/2,(h/4)*3+(w/20)/2);
-        he=h;
+        //position set to a x,y point and making an offset to set the paddle
+        pos.set(w/2 - w/10 ,h/4*3 - h/60,w/2 + w/10,h/4*3+h/60);
+        wi=w;
     }
 
     public void Mover(float x)
     {
-        //seta o paddle de acordo com o touch
-        pos.set(Math.round(x)- (he/10)/2,pos.top,Math.round(x) + (he/10)/2,pos.bottom);
+        //Set paddle position with the touch
+        pos.set(Math.round(x) - wi/10,pos.top,Math.round(x) + wi/10,pos.bottom);
     }
 }

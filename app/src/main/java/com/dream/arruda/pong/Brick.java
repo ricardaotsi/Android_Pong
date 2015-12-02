@@ -23,7 +23,8 @@ import android.graphics.Rect;
 /**
  * Created by Arruda on 14/05/2015.
  */
-public class Brick {
+public class Brick
+{
     Rect[][] pos = new Rect[8][7];
     boolean[][] colidiu = new boolean[8][7];
     Paint p = new Paint();
@@ -31,6 +32,8 @@ public class Brick {
     public Brick(int w, int h)
     {
         p.setARGB(255,255,165,0);
+        //Populate the bricks, this is done by slicing the screen in 7 equal parts for width
+        //and 40 equal parts for height, and adding an offset so the bricks are not "glued" together.
         for (int i=0; i<= pos.length-1;i++)
         {
             for (int j=0; j<=pos[i].length-1;j++)

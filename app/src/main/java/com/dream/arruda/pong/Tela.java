@@ -32,11 +32,13 @@ public class Tela extends View{
     Paddle p;
     Brick b;
     Ball a;
+    //Following variables are for dynamic velocity between devices
     long currentTime, lastFrameTime;
     float elapsed;
 
     public Tela(Context context,int w,int h)
     {
+        //Initialize variables
         super(context);
         p = new Paddle(w,h);
         b = new Brick(w,h);
@@ -46,6 +48,7 @@ public class Tela extends View{
         elapsed=0;
     }
 
+    //single touch event
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction())
@@ -63,8 +66,10 @@ public class Tela extends View{
         currentTime = System.currentTimeMillis();
         a.Mover(p.pos.top, elapsed);
         canvas.drawRect(p.pos, new Paint());
+        //check collison between ball and paddle, if collide change ball direction
         if(new Rect((int)a.pos.getX()-a.raio,(int)a.pos.getY()-a.raio,(int)a.pos.getX()+a.raio,(int)a.pos.getY()+a.raio).intersect(p.pos))
             a.ChangeDirection();
+        //check collision between ball and bricks, if brick is hit set to true so it is not drawn anymore
         for (int i=0; i<= b.pos.length-1;i++)
         {
             for (int j = 0; j <= b.pos[i].length - 1; j++)
