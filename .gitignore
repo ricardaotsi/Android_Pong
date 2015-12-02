@@ -6,3 +6,8 @@
 /build
 .idea
 /.idea/
+Android_Pong.iml
+/app/app.iml
+/gradle/
+gradlew
+gradlew.bat
