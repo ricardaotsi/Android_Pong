@@ -20,7 +20,6 @@ package com.dream.arruda.pong;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -32,6 +31,9 @@ public class Tela extends View{
     Paddle p;
     Brick b;
     Ball a;
+    float posP;
+    int width;
+    int height;
     //Following variables are for dynamic velocity between devices
     long currentTime, lastFrameTime;
     float elapsed;
@@ -43,6 +45,9 @@ public class Tela extends View{
         p = new Paddle(w,h);
         b = new Brick(w,h);
         a = new Ball(w,h);
+        posP = w/2;
+        width = w;
+        height = h;
         currentTime = System.currentTimeMillis();
         lastFrameTime = System.currentTimeMillis();
         elapsed=0;
@@ -54,7 +59,7 @@ public class Tela extends View{
         switch(event.getAction())
         {
             case MotionEvent.ACTION_MOVE:
-                p.Mover(event.getX());
+                posP = event.getX();
         }
         return true;
     }
@@ -64,11 +69,14 @@ public class Tela extends View{
     {
         super.onDraw(canvas);
         currentTime = System.currentTimeMillis();
-        a.Mover(p.pos.top, elapsed);
-        canvas.drawRect(p.pos, new Paint());
+        a.Mover(elapsed);
+        p.Mover(posP);
         //check collison between ball and paddle, if collide change ball direction
-        if(new Rect((int)a.pos.getX()-a.raio,(int)a.pos.getY()-a.raio,(int)a.pos.getX()+a.raio,(int)a.pos.getY()+a.raio).intersect(p.pos))
+        if(a.curpos.intersect(p.pos))
             a.ChangeDirection();
+        //if ball position is bellow paddle, reset position to screen center
+        else if(a.curpos.bottom>p.pos.top)
+            a.pos.set(width/2,height/2);
         //check collision between ball and bricks, if brick is hit set to true so it is not drawn anymore
         for (int i=0; i<= b.pos.length-1;i++)
         {
@@ -77,7 +85,7 @@ public class Tela extends View{
                 if(!b.colidiu[i][j])
                 {
                     canvas.drawRect(b.pos[i][j], b.p);
-                    if(new Rect((int)a.pos.getX()-a.raio,(int)a.pos.getY()-a.raio,(int)a.pos.getX()+a.raio,(int)a.pos.getY()+a.raio).intersect(b.pos[i][j]))
+                    if(a.curpos.intersect(b.pos[i][j]))
                     {
                         b.colidiu[i][j] = true;
                         a.ChangeDirection();
@@ -85,7 +93,8 @@ public class Tela extends View{
                 }
             }
         }
-        canvas.drawCircle((int)a.pos.getX(),(int)a.pos.getY(),a.raio,a.p);
+        canvas.drawCircle((int) a.pos.getX(), (int) a.pos.getY(), a.raio, a.p);
+        canvas.drawRect(p.pos, new Paint());
         elapsed = (System.currentTimeMillis() - lastFrameTime) * .001f;//convert ms to seconds
         lastFrameTime = currentTime;
         invalidate();

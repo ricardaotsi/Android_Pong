@@ -25,8 +25,8 @@ import android.graphics.Rect;
  */
 public class Brick
 {
-    Rect[][] pos = new Rect[8][7];
-    boolean[][] colidiu = new boolean[8][7];
+    Rect[][] pos = new Rect[6][7];
+    boolean[][] colidiu = new boolean[6][7];
     Paint p = new Paint();
 
     public Brick(int w, int h)
