@@ -30,7 +30,7 @@ public class Paddle {
     public Paddle(int w, int h)
     {
         //position set to a x,y point and making an offset to set the paddle
-        pos.set(w/2 - w/10 ,h/4*3 - h/60,w/2 + w/10,h/4*3+h/60);
+        pos.set(w/2 - w/10 ,h/4*3-h/90,w/2 + w/10,h/4*3+h/90);
         wi=w;
     }
 

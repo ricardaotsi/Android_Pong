@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.dream.arruda.pong;
 
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import java.util.Vector;
 
@@ -27,6 +28,7 @@ import java.util.Vector;
 public class Ball {
     Vector2D pos;
     Vector2D dir;
+    Rect curpos;
     double vel;
     int raio;
     int width;
@@ -42,24 +44,21 @@ public class Ball {
         raio = w/35;
         vel = width;
         p.setARGB(255,255,0,0);
+        curpos = new Rect((int)pos.getX()-raio,(int)pos.getY()-raio,(int)pos.getX()+raio,(int)pos.getY()+raio);
     }
     //Move the ball in game loop
-    public void Mover(int y, float fps)
+    public void Mover(float fps)
     {
-        //if ball position is bellow paddle, reset position to screen center
-        if(pos.getY()>=y)
-        {
-            pos.set(width/2,height/2);
-        }
+        //update position with direction and velocity
+        pos.addMe(dir.multiply(vel*fps));
         // if ball hit top wall, change direction
-        else if(pos.getY()-raio<=0)
+        if(pos.getY()-raio>=0 && pos.getY()-raio<=height/50)
             dir.set(dir.getX(), -dir.getY());
         //if ball hit side walls, change direction
         if(pos.getX()+raio>=width || pos.getX()-raio<=0)
             dir.set(-dir.getX(),dir.getY());
-        //update position with direction and velocity
-        pos.addMe(dir.multiply(vel*fps));
-
+        //Update collision Rect
+        curpos = new Rect((int)pos.getX()-raio,(int)pos.getY()-raio,(int)pos.getX()+raio,(int)pos.getY()+raio);
     }
     //change ball direction in collision
     public void ChangeDirection()
