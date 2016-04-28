@@ -26,17 +26,20 @@ import android.view.View;
 /**
  * Created by Arruda on 12/05/2015.
  */
-public class Tela extends View{
+public class Tela extends View implements Runnable{
 
-    Paddle p;
-    Brick b;
-    Ball a;
-    float posP;
-    int width;
-    int height;
+    private Paddle p;
+    private Brick b;
+    private Ball a;
+    private float posP;
+    private int width;
+    private int height;
     //Following variables are for dynamic velocity between devices
-    long currentTime, lastFrameTime;
-    float elapsed;
+    private long currentTime, lastFrameTime;
+    private float elapsed;
+    Thread game;
+    boolean isrunning;
+    Paint paint;
 
     public Tela(Context context,int w,int h)
     {
@@ -51,6 +54,49 @@ public class Tela extends View{
         currentTime = System.currentTimeMillis();
         lastFrameTime = System.currentTimeMillis();
         elapsed=0;
+        game = new Thread(this);
+        isrunning = true;
+        paint = new Paint();
+    }
+
+    @Override
+    public void run(){
+        while(isrunning) {
+            currentTime = System.currentTimeMillis();
+            a.Mover(elapsed);
+            p.Mover(posP);
+            //check collison between ball and paddle, if collide change ball direction
+            if (a.curpos.intersect(p.pos))
+                a.ChangeDirection();
+                //if ball position is bellow paddle, reset position to screen center
+            else if (a.curpos.bottom > p.pos.top)
+                a.pos.set(width / 2, height / 2);
+            //check collision between ball and bricks, if brick is hit set to true so it is not drawn anymore
+            for (int i = 0; i <= b.pos.length - 1; i++) {
+                for (int j = 0; j <= b.pos[i].length - 1; j++) {
+                    if (!b.colidiu[i][j]) {
+                        if (a.curpos.intersect(b.pos[i][j])) {
+                            b.colidiu[i][j] = true;
+                            a.ChangeDirection();
+                        }
+                    }
+                }
+            }
+            elapsed = (System.currentTimeMillis() - lastFrameTime) * .001f;//convert ms to seconds
+            lastFrameTime = currentTime;
+        }
+    }
+
+    public void resume(){
+        isrunning = true;
+        game = new Thread(this);
+        game.start();
+    }
+
+    public void stopThread(){
+        isrunning = false;
+        game.interrupt();
+        game = null;
     }
 
     //single touch event
@@ -68,16 +114,6 @@ public class Tela extends View{
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        currentTime = System.currentTimeMillis();
-        a.Mover(elapsed);
-        p.Mover(posP);
-        //check collison between ball and paddle, if collide change ball direction
-        if(a.curpos.intersect(p.pos))
-            a.ChangeDirection();
-        //if ball position is bellow paddle, reset position to screen center
-        else if(a.curpos.bottom>p.pos.top)
-            a.pos.set(width/2,height/2);
-        //check collision between ball and bricks, if brick is hit set to true so it is not drawn anymore
         for (int i=0; i<= b.pos.length-1;i++)
         {
             for (int j = 0; j <= b.pos[i].length - 1; j++)
@@ -85,18 +121,11 @@ public class Tela extends View{
                 if(!b.colidiu[i][j])
                 {
                     canvas.drawRect(b.pos[i][j], b.p);
-                    if(a.curpos.intersect(b.pos[i][j]))
-                    {
-                        b.colidiu[i][j] = true;
-                        a.ChangeDirection();
-                    }
                 }
             }
         }
         canvas.drawCircle((int) a.pos.getX(), (int) a.pos.getY(), a.raio, a.p);
-        canvas.drawRect(p.pos, new Paint());
-        elapsed = (System.currentTimeMillis() - lastFrameTime) * .001f;//convert ms to seconds
-        lastFrameTime = currentTime;
+        canvas.drawRect(p.pos, paint);
         invalidate();
     }
 }

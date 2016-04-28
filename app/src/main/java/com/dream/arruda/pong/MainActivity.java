@@ -43,4 +43,15 @@ public class MainActivity extends Activity {
         setContentView(t);
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        t.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        t.stopThread();
+    }
 }
