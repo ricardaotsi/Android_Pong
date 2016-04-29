@@ -53,7 +53,7 @@ public class Tela extends View implements Runnable{
         width = w;
         height = h;
         game = new Thread(this);
-        isrunning = true;
+        isrunning = false;
         paint = new Paint();
         currentTime = System.currentTimeMillis();
         lastFrameTime = System.currentTimeMillis();
@@ -120,18 +120,17 @@ public class Tela extends View implements Runnable{
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        for (int i=0; i<= b.pos.length-1;i++)
-        {
-            for (int j = 0; j <= b.pos[i].length - 1; j++)
-            {
-                if(!b.colidiu[i][j])
-                {
-                    canvas.drawRect(b.pos[i][j], b.p);
+        if(isrunning) {
+            for (int i = 0; i <= b.pos.length - 1; i++) {
+                for (int j = 0; j <= b.pos[i].length - 1; j++) {
+                    if (!b.colidiu[i][j]) {
+                        canvas.drawRect(b.pos[i][j], b.p);
+                    }
                 }
             }
+            canvas.drawCircle((int) a.pos.getX(), (int) a.pos.getY(), a.raio, a.p);
+            canvas.drawRect(p.pos, paint);
         }
-        canvas.drawCircle((int) a.pos.getX(), (int) a.pos.getY(), a.raio, a.p);
-        canvas.drawRect(p.pos, paint);
         invalidate();
     }
 }
