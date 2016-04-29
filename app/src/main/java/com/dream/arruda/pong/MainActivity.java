@@ -27,7 +27,7 @@ import android.view.WindowManager;
 
 public class MainActivity extends Activity {
     private Tela t;
-    DisplayMetrics metrics = new DisplayMetrics();
+    private DisplayMetrics metrics = new DisplayMetrics();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,4 +43,15 @@ public class MainActivity extends Activity {
         setContentView(t);
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        t.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        t.stopThread();
+    }
 }
