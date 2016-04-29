@@ -20,14 +20,17 @@ package com.dream.arruda.pong;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
     private Tela t;
     private DisplayMetrics metrics = new DisplayMetrics();
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,5 +56,21 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         t.stopThread();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

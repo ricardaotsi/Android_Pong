@@ -100,6 +100,10 @@ public class Tela extends View implements Runnable{
         game = null;
     }
 
+    public void suspend(){
+        isrunning = false;
+    }
+
     //single touch event
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -107,6 +111,7 @@ public class Tela extends View implements Runnable{
         {
             case MotionEvent.ACTION_MOVE:
                 posP = event.getX();
+                break;
         }
         return true;
     }
