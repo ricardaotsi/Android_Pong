@@ -31,15 +31,16 @@ public class Tela extends View implements Runnable{
     private Paddle p;
     private Brick b;
     private Ball a;
+    //paddle position on touch event
     private float posP;
     private int width;
     private int height;
+    private Thread game;
+    private boolean isrunning;
+    private Paint paint;
     //Following variables are for dynamic velocity between devices
     private long currentTime, lastFrameTime;
     private float elapsed;
-    Thread game;
-    boolean isrunning;
-    Paint paint;
 
     public Tela(Context context,int w,int h)
     {
@@ -51,12 +52,12 @@ public class Tela extends View implements Runnable{
         posP = w/2;
         width = w;
         height = h;
-        currentTime = System.currentTimeMillis();
-        lastFrameTime = System.currentTimeMillis();
-        elapsed=0;
         game = new Thread(this);
         isrunning = true;
         paint = new Paint();
+        currentTime = System.currentTimeMillis();
+        lastFrameTime = System.currentTimeMillis();
+        elapsed=0;
     }
 
     @Override

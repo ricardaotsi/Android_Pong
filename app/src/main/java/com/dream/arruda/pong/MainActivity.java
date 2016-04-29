@@ -27,7 +27,7 @@ import android.view.WindowManager;
 
 public class MainActivity extends Activity {
     private Tela t;
-    DisplayMetrics metrics = new DisplayMetrics();
+    private DisplayMetrics metrics = new DisplayMetrics();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
