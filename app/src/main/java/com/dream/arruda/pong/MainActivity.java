@@ -1,18 +1,43 @@
+/*
+Copyright 2015 Ricardo Arruda Sowek
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.dream.arruda.pong;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+/**
+ * Created by ti on 15/06/2016.
+ */
 public class MainActivity extends Activity {
 
     private boolean doubleBackToExitPressedOnce = false;
+    private Menu menu;
+    private Intent intent;
+    private DisplayMetrics metrics = new DisplayMetrics();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,16 +46,26 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        Toast.makeText(this, "teste", Toast.LENGTH_SHORT).show();
+        //get screen metrics for dynamic graphics
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        intent = new Intent(this,GameActivity.class);
+        //create menu class
+        menu = new Menu(this, metrics.widthPixels,metrics.heightPixels);
+        setContentView(menu);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction())
         {
-            case MotionEvent.ACTION_POINTER_UP:
-                Intent intent = new Intent(this,GameActivity.class);
-                startActivity(intent);
+            case MotionEvent.ACTION_DOWN:
+                if((event.getX()> menu.play.left && event.getX()<menu.play.right)&&(event.getY()>menu.play.top && event.getY()<menu.play.bottom))
+                    menu.playpaint.setColor(Color.GRAY);
+                break;
+            case MotionEvent.ACTION_UP:
+                if((event.getX()> menu.play.left && event.getX()<menu.play.right)&&(event.getY()>menu.play.top && event.getY()<menu.play.bottom))
+                    startActivity(intent);
+                menu.playpaint.setColor(Color.BLACK);
                 break;
         }
         return true;
@@ -43,7 +78,7 @@ public class MainActivity extends Activity {
             return;
         }
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Press BACK again to exit", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

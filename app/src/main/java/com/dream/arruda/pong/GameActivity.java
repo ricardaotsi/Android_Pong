@@ -26,7 +26,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-
+/**
+ * Created by Arruda on 12/05/2015.
+ */
 public class GameActivity extends Activity {
     private Tela t;
     private DisplayMetrics metrics = new DisplayMetrics();
@@ -40,7 +42,7 @@ public class GameActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //get screen metrics for dynamic graphics
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        //Create our window class
+        //Create our game class
         t = new Tela(this,metrics.widthPixels,metrics.heightPixels);
         setContentView(t);
     }
