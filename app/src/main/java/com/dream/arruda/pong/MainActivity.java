@@ -18,19 +18,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.dream.arruda.pong;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-
+/**
+ * Created by ti on 15/06/2016.
+ */
 public class MainActivity extends Activity {
-    private Tela t;
-    private DisplayMetrics metrics = new DisplayMetrics();
+
     private boolean doubleBackToExitPressedOnce = false;
+    private Menu menu;
+    private Intent intent;
+    private DisplayMetrics metrics = new DisplayMetrics();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,21 +48,27 @@ public class MainActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //get screen metrics for dynamic graphics
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        //Create our window class
-        t = new Tela(this,metrics.widthPixels,metrics.heightPixels);
-        setContentView(t);
+        intent = new Intent(this,GameActivity.class);
+        //create menu class
+        menu = new Menu(this, metrics.widthPixels,metrics.heightPixels);
+        setContentView(menu);
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
-        t.resume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        t.stopThread();
+    public boolean onTouchEvent(MotionEvent event) {
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                if((event.getX()> menu.play.left && event.getX()<menu.play.right)&&(event.getY()>menu.play.top && event.getY()<menu.play.bottom))
+                    menu.playpaint.setColor(Color.GRAY);
+                break;
+            case MotionEvent.ACTION_UP:
+                if((event.getX()> menu.play.left && event.getX()<menu.play.right)&&(event.getY()>menu.play.top && event.getY()<menu.play.bottom))
+                    startActivity(intent);
+                menu.playpaint.setColor(Color.BLACK);
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -65,7 +78,7 @@ public class MainActivity extends Activity {
             return;
         }
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Press BACK again to exit", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
