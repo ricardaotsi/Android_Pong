@@ -20,8 +20,6 @@ package com.dream.arruda.pong;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import java.util.Vector;
-
 /**
  * Created by Arruda on 15/05/2015.
  */

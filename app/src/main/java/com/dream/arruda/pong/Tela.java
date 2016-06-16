@@ -20,6 +20,7 @@ package com.dream.arruda.pong;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -31,8 +32,6 @@ public class Tela extends View implements Runnable{
     private Paddle p;
     private Brick b;
     private Ball a;
-    //paddle position on touch event
-    private float posP;
     private int width;
     private int height;
     private Thread game;
@@ -41,6 +40,7 @@ public class Tela extends View implements Runnable{
     //Following variables are for dynamic velocity between devices
     private long currentTime, lastFrameTime;
     private float elapsed;
+    private long timer = 4;
 
     public Tela(Context context,int w,int h)
     {
@@ -49,12 +49,12 @@ public class Tela extends View implements Runnable{
         p = new Paddle(w,h);
         b = new Brick(w,h);
         a = new Ball(w,h);
-        posP = w/2;
         width = w;
         height = h;
         game = new Thread(this);
         isrunning = false;
         paint = new Paint();
+        paint.setTextSize(w/3);
         currentTime = System.currentTimeMillis();
         lastFrameTime = System.currentTimeMillis();
         elapsed=0;
@@ -62,36 +62,46 @@ public class Tela extends View implements Runnable{
 
     @Override
     public void run(){
-        while(isrunning) {
-            currentTime = System.currentTimeMillis();
-            a.Mover(elapsed);
-            p.Mover(posP);
-            //check collison between ball and paddle, if collide change ball direction
-            if (a.curpos.intersect(p.pos))
-                a.ChangeDirection();
-                //if ball position is bellow paddle, reset position to screen center
-            else if (a.curpos.bottom > p.pos.top)
-                a.pos.set(width / 2, height / 2);
-            //check collision between ball and bricks, if brick is hit set to true so it is not drawn anymore
-            for (int i = 0; i <= b.pos.length - 1; i++) {
-                for (int j = 0; j <= b.pos[i].length - 1; j++) {
-                    if (!b.colidiu[i][j]) {
-                        if (a.curpos.intersect(b.pos[i][j])) {
-                            b.colidiu[i][j] = true;
-                            a.ChangeDirection();
+        while (isrunning) {
+            if(timer==0) {
+                currentTime = System.currentTimeMillis();
+                a.Mover(elapsed);
+                //check collison between ball and paddle, if collide change ball direction
+                if (a.curpos.intersect(p.pos))
+                    a.ChangeDirection();
+                    //if ball position is bellow paddle, reset position to screen center
+                else if (a.curpos.bottom > p.pos.top)
+                    a.pos.set(width / 2, height / 2);
+                //check collision between ball and bricks, if brick is hit set to true so it is not drawn anymore
+                for (int i = 0; i <= b.pos.length - 1; i++) {
+                    for (int j = 0; j <= b.pos[i].length - 1; j++) {
+                        if (!b.colidiu[i][j]) {
+                            if (a.curpos.intersect(b.pos[i][j])) {
+                                b.colidiu[i][j] = true;
+                                a.ChangeDirection();
+                            }
                         }
                     }
                 }
+                elapsed = (System.currentTimeMillis() - lastFrameTime) * .001f;//convert ms to seconds
+                lastFrameTime = currentTime;
             }
-            elapsed = (System.currentTimeMillis() - lastFrameTime) * .001f;//convert ms to seconds
-            lastFrameTime = currentTime;
         }
     }
 
     public void resume(){
         isrunning = true;
+        a = new Ball(width,height);
         game = new Thread(this);
         game.start();
+        new CountDownTimer(4000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                timer = millisUntilFinished / 1000;
+            }
+            public void onFinish() {
+                timer =0;
+            }
+        }.start();
     }
 
     public void stopThread(){
@@ -100,17 +110,13 @@ public class Tela extends View implements Runnable{
         game = null;
     }
 
-    public void suspend(){
-        isrunning = false;
-    }
-
     //single touch event
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction())
         {
             case MotionEvent.ACTION_MOVE:
-                posP = event.getX();
+                p.Mover(event.getX());
                 break;
         }
         return true;
@@ -131,6 +137,8 @@ public class Tela extends View implements Runnable{
             canvas.drawCircle((int) a.pos.getX(), (int) a.pos.getY(), a.raio, a.p);
             canvas.drawRect(p.pos, paint);
         }
+        if(timer>0)
+            canvas.drawText(String.valueOf(timer),width/2-width/12,height/2-height/10,paint);
         invalidate();
     }
 }
