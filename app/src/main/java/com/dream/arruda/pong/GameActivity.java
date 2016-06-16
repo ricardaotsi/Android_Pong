@@ -20,11 +20,9 @@ package com.dream.arruda.pong;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 /**
  * Created by Arruda on 12/05/2015.
@@ -59,4 +57,3 @@ public class GameActivity extends Activity {
         t.stopThread();
     }
 }
-
