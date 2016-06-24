@@ -1,8 +1,8 @@
 # Android_Pong
-Minimalist pong for android with dynamic graphics.
+Study of an android pong made in pure java with dynamic graphics.
 
 
-The intent of this project is to create a simple pong game to learn android basic games concepts, and how to handle save/load instances.
+The intent of this project is to create a simple pong game to learn android basic games concepts.
 
 Actual game running:
 
